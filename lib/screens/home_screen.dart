@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
           ),
           Container(width: double.infinity, padding: EdgeInsets.only(left: 15, top:10, bottom: 10), child: Text('Latest jobs on market', style: TextStyle(fontSize: 20),)),
           FutureBuilder(
-            future: Provider.of<Jobs>(context, listen: false).fetchAndSetJobs(),
+            future: Provider.of<Jobs>(context, listen: false).fetchAndSetJobs0(),
             builder: (ctx, snapshot) {
               if(snapshot.connectionState == ConnectionState.waiting) {
                 return Container(
@@ -70,7 +70,8 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(),
+                      //CircularProgressIndicator(),
+                      Image.network('https://i.imgur.com/F9cLIoA.gif')
                     ],
                   ),
                 );

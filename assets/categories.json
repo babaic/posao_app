@@ -1,0 +1,198 @@
+[
+    {
+      "id": 1,
+      "name": "Administrativne i slične usluge"
+    },
+    {
+      "id": 2,
+      "name": "Arhitektonske usluge"
+    },
+    {
+      "id": 3,
+      "name": "Bankarstvo"
+    },
+    {
+      "id": 4,
+      "name": "Biotehnologija i farmacija"
+    },
+    {
+      "id": 5,
+      "name": "Konsalting"
+    },
+    {
+      "id": 6,
+      "name": "Državna služba i uprava"
+    },
+    {
+      "id": 7,
+      "name": "Ekonomija i finansije"
+    },
+    {
+      "id": 8,
+      "name": "Građevinarstvo"
+    },
+    {
+      "id": 9,
+      "name": "Informatika - Hardware"
+    },
+    {
+      "id": 10,
+      "name": "Informatika - Software"
+    },
+    {
+      "id": 11,
+      "name": "Zanatske usluge"
+    },
+    {
+      "id": 12,
+      "name": "Menadžment i upravljanje"
+    },
+    {
+      "id": 13,
+      "name": "Marketing-PR"
+    },
+    {
+      "id": 14,
+      "name": "Mediji"
+    },
+    {
+      "id": 15,
+      "name": "Obrazovanje"
+    },
+    {
+      "id": 16,
+      "name": "Osiguranje"
+    },
+    {
+      "id": 17,
+      "name": "Ostalo"
+    },
+    {
+      "id": 18,
+      "name": "Policija - Zaštitarske usluge"
+    },
+    {
+      "id": 19,
+      "name": "Poljoprivreda - Ribarstvo - Šumarstvo"
+    },
+    {
+      "id": 20,
+      "name": "Pravo"
+    },
+    {
+      "id": 21,
+      "name": "Proizvodnja"
+    },
+    {
+      "id": 22,
+      "name": "Računovodstvo - Revizija"
+    },
+    {
+      "id": 23,
+      "name": "Socijalne usluge - Neprofitne organizacije"
+    },
+    {
+      "id": 24,
+      "name": "Telekomunikacije"
+    },
+    {
+      "id": 25,
+      "name": "Transport - Skladištenje i logistika"
+    },
+    {
+      "id": 26,
+      "name": "Turizam"
+    },
+    {
+      "id": 27,
+      "name": "Ugostiteljstvo"
+    },
+    {
+      "id": 28,
+      "name": "Umjetnost i dizajn"
+    },
+    {
+      "id": 29,
+      "name": "Nauka - Istraživački rad"
+    },
+    {
+      "id": 31,
+      "name": "Energetika"
+    },
+    {
+      "id": 32,
+      "name": "Elektrotehnika - Mašinstvo"
+    },
+    {
+      "id": 33,
+      "name": "Zdravstvo"
+    },
+    {
+      "id": 34,
+      "name": "Komercijala - Prodaja"
+    },
+    {
+      "id": 35,
+      "name": "Oglasi ZZZRS"
+    },
+    {
+      "id": 36,
+      "name": "Veterina"
+    },
+    {
+      "id": 37,
+      "name": "Mali oglasi"
+    },
+    {
+      "id": 38,
+      "name": "Ljepota i zdravlje"
+    },
+    {
+      "id": 39,
+      "name": "Prehrambena Industrija"
+    },
+    {
+      "id": 41,
+      "name": "Zabava"
+    },
+    {
+      "id": 42,
+      "name": "Grafički dizajn"
+    },
+    {
+      "id": 43,
+      "name": "Nekretnine"
+    },
+    {
+      "id": 44,
+      "name": "Rudarstvo"
+    },
+    {
+      "id": 45,
+      "name": "Saobraćaj i komunikacije"
+    },
+    {
+      "id": 46,
+      "name": "Ekologija"
+    },
+    {
+      "id": 47,
+      "name": "IT"
+    },
+    {
+      "id": 48,
+      "name": "Grafička industrija"
+    },
+    {
+      "id": 49,
+      "name": "Ekonomija, finansije i računovodstvo"
+    },
+    {
+      "id": 50,
+      "name": "Ugostiteljstvo i turizam"
+    },
+    {
+      "id": 51,
+      "name": "Ljudski resursi"
+    }
+  ]

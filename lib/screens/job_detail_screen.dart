@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:posao_app/models/job.dart';
 import 'package:posao_app/providers/jobs.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class JobDetailScreen extends StatelessWidget {
@@ -22,6 +24,14 @@ class JobDetailScreen extends StatelessWidget {
 </div>
 <p>...</p>
 ''';
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +56,29 @@ class JobDetailScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(color: Colors.blue, width: 1)),
-                  child: FlatButton.icon(
-                      onPressed: () => Provider.of<Jobs>(context, listen: false)
-                          .changeTitle('changed'),
-                      icon: Icon(
-                        Icons.favorite_border,
-                        color: Colors.blue,
-                      ),
-                      label: Text(
-                        'SAVE',
-                        style: TextStyle(color: Colors.blue),
-                      ))),
+                  child: FutureBuilder(
+                      future: Provider.of<Jobs>(context, listen: false)
+                          .selectedJob(id),
+                      builder: (ctx, AsyncSnapshot<Job> future) {
+                        if (future.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else {
+                          return FlatButton.icon(
+                              onPressed: () =>
+                                  Provider.of<Jobs>(context, listen: false)
+                                      .saveJob(future.data),
+                              icon: future.data.saved
+                                  ? Icon(Icons.favorite, color: Colors.blue)
+                                  : Icon(
+                                      Icons.favorite_border,
+                                      color: Colors.blue,
+                                    ),
+                              label: Text(
+                                'SAVE',
+                                style: TextStyle(color: Colors.blue),
+                              ));
+                        }
+                      })),
               Expanded(
                 child: Container(
                   margin: EdgeInsets.all(10),
@@ -64,7 +86,8 @@ class JobDetailScreen extends StatelessWidget {
                       color: Colors.blue,
                       border: Border.all(color: Colors.blue, width: 1)),
                   child: FlatButton(
-                      onPressed: null,
+                      onPressed: () => _launchURL(
+                          'https://www.mojposao.ba/#apply;jobId=$id'),
                       child: Text('Easy Apply',
                           style: TextStyle(color: Colors.white))),
                 ),
@@ -77,7 +100,11 @@ class JobDetailScreen extends StatelessWidget {
             future: Provider.of<Jobs>(context, listen: false).getJobById(id),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return Center(
+                  child: CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.green),
+                  ),
+                );
               } else {
                 //return Text(snapshot.data['description']);
                 return Column(children: [
@@ -93,8 +120,16 @@ class JobDetailScreen extends StatelessWidget {
                             height: 100,
                             width: 100,
                             color: Colors.green,
-                            child: Image.network(
-                                Provider.of<Jobs>(context, listen: false).selectedJobDetails.company.photo, fit: BoxFit.cover,)),
+                            child: Hero(
+                              tag: 'job-img-$id',
+                              child: Image.network(
+                                Provider.of<Jobs>(context, listen: false)
+                                    .selectedJobDetails
+                                    .company
+                                    .photo,
+                                fit: BoxFit.fill,
+                              ),
+                            )),
                       ),
                     ],
                   ),

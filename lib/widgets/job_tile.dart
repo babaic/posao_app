@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:posao_app/models/job.dart';
+import 'package:posao_app/providers/jobs.dart';
+import 'package:provider/provider.dart';
 
 class JobTile extends StatelessWidget {
   final Job jobData;
@@ -14,9 +16,11 @@ class JobTile extends StatelessWidget {
             decoration: BoxDecoration(border: Border.all(color: Colors.black)),
             height: 50,
             width: 50,
-            child: Image(
-              image: NetworkImage(
-                  jobData.company.photo),
+            child: Hero(
+              tag: 'job-img-${jobData.id}',
+              child: Image(
+                image: NetworkImage(jobData.company.photo),
+              ),
             ),
           ),
           title: Column(
@@ -24,13 +28,19 @@ class JobTile extends StatelessWidget {
             children: [
               Text(
                 jobData.title,
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(color: Colors.green),
               ),
               Text(jobData.company.name),
               Text(jobData.company.city),
             ],
           ),
-          trailing: Icon(Icons.favorite_border),
+          trailing: InkWell(
+            onTap: () =>
+                Provider.of<Jobs>(context, listen: false).saveJob(jobData),
+            child: jobData.saved
+                ? Icon(Icons.favorite)
+                : Icon(Icons.favorite_border),
+          ),
         ),
         Divider(color: Colors.black)
       ],
