@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:posao_app/providers/jobs.dart';
+import 'package:posao_app/screens/display_it_jobs.screen.dart';
 import 'package:posao_app/screens/display_jobs.screen.dart';
 import 'package:posao_app/widgets/category_box2.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,8 @@ class _JobsCategories2ScreenState extends State<JobsCategories2Screen> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    DisplayJobsScreen(industry: 'industry=$industry', title: name,))));
+                    industry == 9999 ? DisplayItJobsScreen() : DisplayJobsScreen(industry: 'industry=$industry', title: name,)
+                    )));
   }
 
   Future<void> loadCategories() async {
@@ -35,6 +37,7 @@ class _JobsCategories2ScreenState extends State<JobsCategories2Screen> {
 
   @override
   Widget build(BuildContext context) {
+    print('jobs_cat2');
     return FutureBuilder(
         future: loadCategories(),
         builder: (ctx, futureSnapshot) {

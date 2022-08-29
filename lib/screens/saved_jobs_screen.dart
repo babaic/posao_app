@@ -18,6 +18,7 @@ class SavedJobsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         body: FutureBuilder(
       future: Provider.of<Jobs>(context).getSavedJobs(),
       builder: (ctx, futureSnapshot) {

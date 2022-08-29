@@ -28,7 +28,7 @@ class CategoryBox2 extends StatelessWidget {
           ),
           height: 165,
           width: 174,
-          child: Image.network('https://i.imgur.com/ZN51aMG.png', fit: BoxFit.cover,),
+          child: Image.asset('assets/linije.png', fit: BoxFit.cover,),
         ),
         Container(
           width: 174,

@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:posao_app/models/job.dart';
 import 'package:posao_app/providers/jobs.dart';
+import 'package:posao_app/screens/it_job_detail_screen.dart';
+import 'package:posao_app/widgets/it_job_tile.dart';
 import 'package:posao_app/widgets/job_tile.dart';
 import 'package:provider/provider.dart';
 
 import 'job_detail_screen.dart';
 
-class DisplayJobsScreen extends StatefulWidget {
-  static const routeName = '/display-jobs';
-  final String industry;
-  final String title;
-  final String location;
-  DisplayJobsScreen({this.industry, this.title, this.location});
+class DisplayItJobsScreen extends StatefulWidget {
+  static const routeName = '/display-it-jobs';
+  final bool showHeader;
+
+  DisplayItJobsScreen({this.showHeader = true});
 
   @override
-  _DisplayJobsScreenState createState() => _DisplayJobsScreenState();
+  _DisplayItJobsScreenState createState() => _DisplayItJobsScreenState();
 }
 
-class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
+class _DisplayItJobsScreenState extends State<DisplayItJobsScreen> {
   int pageNumber;
   bool isCategorySaved;
   var _controller = ScrollController();
@@ -34,20 +35,21 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
   @override
   void initState() {
     super.initState();
-    pageNumber = 0;
+    pageNumber = 1;
     // Setup the listener.
     _controller.addListener(() async {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
         print('pageNumber $pageNumber');
+        print('reached end');
         if (pageNumber != Provider.of<Jobs>(context, listen: false).totPage) {
           try {
             showInSnackBar('Tražimo još poslova...', 20);
             var res = await Provider.of<Jobs>(context, listen: false)
-                .fetchAndSetJobs2(
-                    ++pageNumber * 10, 10, widget.industry, widget.location);
+                .fetchJobsFrom_Dzobs(++pageNumber);
           } catch (error) {}
           _scaffoldKey.currentState.hideCurrentSnackBar();
         } else {
+          print('NEMA VISE POSLOVA');
           showInSnackBar('Nemamo više poslova za prikazati :(', 4);
         }
       }
@@ -65,34 +67,34 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-    FutureBuilder(future: Provider.of<Jobs>(context, listen: false).isCategorySaved(widget.industry), builder: (ctx, futureSnapshot) {
-      if(futureSnapshot.connectionState == ConnectionState.done) {
-        isCategorySaved = futureSnapshot.data;
-        return IconButton(
-      icon: isCategorySaved == true ? Icon(Icons.remove_circle) : Icon(Icons.add_circle),
-      onPressed: () {
-        Provider.of<Jobs>(context, listen: false).saveCategoryAsInterest(widget.industry, widget.title).then((value) {
-          showInSnackBar(isCategorySaved ? 'Ne pratite kategoriju više' : 'Pratite kategoriju', 4, isCategorySaved ? 'red' : 'green');
-          setState(() {
+      appBar: widget.showHeader == true ? AppBar(
+        title: Text("IT poslovi"),
+  //       actions: [
+  //   FutureBuilder(future: Provider.of<Jobs>(context, listen: false).isCategorySaved(widget.industry), builder: (ctx, futureSnapshot) {
+  //     if(futureSnapshot.connectionState == ConnectionState.done) {
+  //       isCategorySaved = futureSnapshot.data;
+  //       return IconButton(
+  //     icon: isCategorySaved == true ? Icon(Icons.remove_circle) : Icon(Icons.add_circle),
+  //     onPressed: () {
+  //       Provider.of<Jobs>(context, listen: false).saveCategoryAsInterest(widget.industry, widget.title).then((value) {
+  //         showInSnackBar(isCategorySaved ? 'Ne pratite kategoriju više' : 'Pratite kategoriju', 4, isCategorySaved ? 'red' : 'green');
+  //         setState(() {
             
-          });
-        });
-      },
-    );
-      }
-      else {
-        return CircularProgressIndicator();
-      }
-    }),
-    // add more IconButton
-  ],
-      ),
+  //         });
+  //       });
+  //     },
+  //   );
+  //     }
+  //     else {
+  //       return CircularProgressIndicator();
+  //     }
+  //   }),
+  //   // add more IconButton
+  // ],
+      ) : null,
       body: FutureBuilder(
         future: Provider.of<Jobs>(context, listen: false)
-            .fetchAndSetJobs2(0, 10, widget.industry, widget.location),
+            .fetchJobsFrom_Dzobs(1),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
@@ -109,9 +111,9 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
             );
           } else {
             return Consumer<Jobs>(
-                builder: (ctx, jobsData, child) => jobsData.jobs.length == 0 ? Center(child: Image.asset('assets/nema.gif')) : ListView.builder(
+                builder: (ctx, jobsData, child) => jobsData.itJobs.length == 0 ? Center(child: Image.asset('assets/nema.gif')) : ListView.builder(
                     controller: _controller,
-                    itemCount: jobsData.jobs.length,
+                    itemCount: jobsData.itJobs.length,
                     itemBuilder: (ctx, index) {
                       return InkWell(
                           onTap: () =>
@@ -120,7 +122,7 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
                                     Duration(milliseconds: 1000),
                                 pageBuilder: (context, animation,
                                         secondaryAnimation) =>
-                                    JobDetailScreen(jobsData.jobs[index].id),
+                                    ItJobDetailScreen(jobsData.itJobs[index].url),
                                 transitionsBuilder: (context, animation,
                                     secondaryAnimation, child) {
                                   var begin = Offset(0.0, 1.0);
@@ -134,10 +136,18 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
                                   );
                                 },
                               )),
-                          child: JobTile(jobsData.jobs[index]));
+                          child: ItJobTile(jobsData.itJobs[index]));
                     }));
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        label: const Text('Filtriraj'),
+        icon: const Icon(Icons.filter_alt_outlined),
+        backgroundColor: Colors.green,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:posao_app/models/job.dart';
 import 'package:posao_app/providers/jobs.dart';
@@ -18,9 +19,14 @@ class JobTile extends StatelessWidget {
             width: 50,
             child: Hero(
               tag: 'job-img-${jobData.id}',
-              child: Image(
-                image: NetworkImage(jobData.company.photo),
-              ),
+              child: Image.network(jobData.company.photo,
+    errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+        return Image.asset('assets/building.png');
+    },
+),
+              // Image(
+              //   image: jobData.company.photo != null ? NetworkImage(jobData.company.photo) : Image.network('assets/building.png'),
+              // ),
             ),
           ),
           title: Column(

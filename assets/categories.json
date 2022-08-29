@@ -1,5 +1,9 @@
 [
     {
+      "id": 9999,
+      "name": "IT Poslovi"
+    },
+    {
       "id": 1,
       "name": "Administrativne i slične usluge"
     },
@@ -30,14 +34,6 @@
     {
       "id": 8,
       "name": "Građevinarstvo"
-    },
-    {
-      "id": 9,
-      "name": "Informatika - Hardware"
-    },
-    {
-      "id": 10,
-      "name": "Informatika - Software"
     },
     {
       "id": 11,

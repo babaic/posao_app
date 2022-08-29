@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:posao_app/providers/jobs.dart';
+import 'package:posao_app/screens/display_it_jobs.screen.dart';
 import 'package:posao_app/screens/display_jobs.screen.dart';
 import 'package:posao_app/screens/home2_screen.dart';
 import 'package:posao_app/screens/home_screen.dart';
@@ -26,13 +27,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => Test()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        title: 'Ja BiH posao',
         theme: ThemeData(
           primarySwatch: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: DefaultTabController(
-          length: 3,
+          length: 4,
           child: Scaffold(
             appBar: AppBar(
               toolbarHeight: 70,
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
                       children: [
                         Tab(icon: Icon(Icons.home)),
                         Text(
-                          'Home',
+                          'Pretraga',
                           style: TextStyle(fontSize: 12),
                         )
                       ],
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
                       children: [
                         Tab(icon: Icon(Icons.business_center)),
                         Text(
-                          'Departments',
+                          'Kategorije',
                           style: TextStyle(fontSize: 12),
                         )
                       ],
@@ -61,8 +63,17 @@ class MyApp extends StatelessWidget {
                       children: [
                         Tab(icon: Icon(Icons.favorite_border)),
                         Text(
-                          'Saved jobs',
+                          'Sačuvani',
                           style: TextStyle(fontSize: 12),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Tab(icon: Icon(Icons.code, color: Colors.yellow,)),
+                        Text(
+                          'IT poslovi',
+                          style: TextStyle(fontSize: 12, color: Colors.yellow),
                         )
                       ],
                     ),
@@ -84,7 +95,7 @@ class MyApp extends StatelessWidget {
                 Home2Screen(),
                 JobsCategories2Screen(),
                 SavedJobsScreen(),
-                //Icon(Icons.directions_bike),
+                DisplayItJobsScreen(showHeader: false,)
               ],
             ),
           ),

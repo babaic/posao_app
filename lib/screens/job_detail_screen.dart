@@ -25,13 +25,9 @@ class JobDetailScreen extends StatelessWidget {
 <p>...</p>
 ''';
 
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  void _launchURL(String _url) async =>
+    await launch(_url);
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +70,7 @@ class JobDetailScreen extends StatelessWidget {
                                       color: Colors.blue,
                                     ),
                               label: Text(
-                                'SAVE',
+                                'SPASI',
                                 style: TextStyle(color: Colors.blue),
                               ));
                         }
@@ -88,7 +84,7 @@ class JobDetailScreen extends StatelessWidget {
                   child: FlatButton(
                       onPressed: () => _launchURL(
                           'https://www.mojposao.ba/#apply;jobId=$id'),
-                      child: Text('Easy Apply',
+                      child: Text('Prijavi se',
                           style: TextStyle(color: Colors.white))),
                 ),
               ),

@@ -19,6 +19,7 @@ class JobsCategoriesScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    print('jobs_cat');
     return Scaffold(
         backgroundColor: Colors.grey[200],
         body: GridView.count(
