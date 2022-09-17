@@ -40,6 +40,16 @@ class Jobs with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<ITJobCategory>> getCategoriesFrom_Dzobs() async {
+    List<ITJobCategory> itJobsCategories = List<ITJobCategory>();
+    var response = await http.get(Uri.parse('https://www.dzobs.com/api/tags/get'));
+    var extractData = json.decode(utf8.decode(response.bodyBytes));
+    for(var i = 0; i < extractData.length; i++) {
+      itJobsCategories.add(ITJobCategory(extractData[i]['value'], extractData[i]['label']));
+    }
+    return itJobsCategories;
+  }
+
   Future<ITJobDetail> getJobDetailFrom_Dzobs(String url) async {
     print(url);
     // url = 'https://raw.githubusercontent.com/babaic/remoteUrls/main/jobdetail.json';
@@ -106,16 +116,43 @@ class Jobs with ChangeNotifier {
     return jobDetail;
   }
 
-  Future<void> fetchJobsFrom_Dzobs(int page) async {
-    print('uslo');
+  Future<void> fetchJobsFrom_Dzobs(int page, [bool isQuery = false, String lokacija, String kategorija, String iskustvo]) async {
     if (page == 1) {
       _itJobs = [];
     }
 
-    const url = 'https://www.dzobs.com/_next/data/wxfPjjwvHHk7eXIM8KPAk/poslovi/';
+    var url = 'https://www.dzobs.com/_next/data/wxfPjjwvHHk7eXIM8KPAk/poslovi/';
     var urlQueryPart = page.toString() + '.json';
-    //var response = await http.get(Uri.parse(url + urlQueryPart));
-    var response = await http.get(Uri.parse('https://raw.githubusercontent.com/babaic/remoteUrls/main/jobs.json'));
+
+    if(isQuery) {
+      print('it is query');
+      print(lokacija);
+      print(kategorija);
+      print(iskustvo);
+      url = 'https://www.dzobs.com/_next/data/wxfPjjwvHHk7eXIM8KPAk/pretraga.json?';
+      if(lokacija != null && lokacija != '') {
+        url += 'lokacija=$lokacija&';
+      }
+      else {
+        url += 'lokacija=&';
+      }
+      if(kategorija != null && kategorija != '') {
+        url +='tag=$kategorija&';
+      }
+      else {
+        url +='tag=&';
+      }
+      if(iskustvo != null && iskustvo != '') {
+        url +='iskustvo=$iskustvo';
+      }
+      else {
+        url +='iskustvo=';
+      }
+      urlQueryPart='&page=$page';
+    }
+
+    var response = await http.get(Uri.parse(url + urlQueryPart));
+    //var response = await http.get(Uri.parse('https://raw.githubusercontent.com/babaic/remoteUrls/main/jobs.json'));
     print(url + urlQueryPart);
     print('response status ${response.statusCode}');
     var extractData = json.decode(utf8.decode(response.bodyBytes));

@@ -51,7 +51,7 @@ class ItJobTile extends StatelessWidget {
               Text(jobData.company.name),
               Visibility(child: Text(jobData.location), visible: jobData.location != ""),
               Text(jobData.department),
-              Visibility(child: Text(jobData.sallary, style: TextStyle(color: Colors.green[900], fontWeight: FontWeight.bold)), visible: jobData.sallary != ""),
+              Visibility(child: Text(jobData.sallary ?? '', style: TextStyle(color: Colors.green[900], fontWeight: FontWeight.bold)), visible: (jobData.sallary != "" && jobData.sallary != null)),
               Row(children: jobData.level.split(",").map((lvl) => 
                 Container(
                   margin: EdgeInsets.only(right: 5, top: 5),

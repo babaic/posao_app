@@ -37,3 +37,10 @@ class ITJobDetail extends ITJob {
       })
       : super(title: title, location: locations, company: company, level: level, companySlug: companySlug, jobSlug: jobSlug);
 }
+
+class ITJobCategory {
+  final String value;
+  final String label;
+
+  ITJobCategory(this.value, this.label);
+}
