@@ -6,6 +6,7 @@ import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:posao_app/providers/jobs.dart';
 import 'package:posao_app/screens/display_it_jobs.screen.dart';
 import 'package:posao_app/screens/it_job_detail_screen.dart';
+import 'package:posao_app/widgets/profesion_select.dart';
 import 'package:provider/provider.dart';
 
 import 'display_jobs.screen.dart';
@@ -33,9 +34,15 @@ class _Home2ScreenState extends State<Home2Screen> {
     'Tuzla'
   ]; // Option 2,
   String _selectedLocation; // Option 2
-
-  List<Profesion> listProfesions = [];
   Profesion selectedProfesion;
+
+  void getSelectedProfesion(var profesion) {
+    selectedProfesion = profesion;
+    print('profesion ${selectedProfesion.name}');
+  }
+
+  // List<Profesion> listProfesions = [];
+  // Profesion selectedProfesion;
 
   static const List<String> _kOptions = <String>[
     'Banovići',
@@ -76,7 +83,7 @@ class _Home2ScreenState extends State<Home2Screen> {
 'Goražde',
 'Gornji Vakuf - Uskoplje',
 'Gračanica',
-'Grad Mostar',
+'Mostar',
 'Gradačac',
 'Gradiška',
 'Grude',
@@ -170,17 +177,17 @@ class _Home2ScreenState extends State<Home2Screen> {
 'Živinice'
   ];
 
-  Future<void> loadCategories() async {
-    List<Profesion> profesionToAdd = new List<Profesion>();
-    String data = await DefaultAssetBundle.of(context)
-        .loadString("assets/categories.json");
-    final categoriesJson = json.decode(data);
-    for (var i = 0; i < categoriesJson.length; i++) {
-      profesionToAdd
-          .add(Profesion(categoriesJson[i]['name'], categoriesJson[i]['id']));
-    }
-    listProfesions = profesionToAdd;
-  }
+  // Future<void> loadCategories() async {
+  //   List<Profesion> profesionToAdd = new List<Profesion>();
+  //   String data = await DefaultAssetBundle.of(context)
+  //       .loadString("assets/categories.json");
+  //   final categoriesJson = json.decode(data);
+  //   for (var i = 0; i < categoriesJson.length; i++) {
+  //     profesionToAdd
+  //         .add(Profesion(categoriesJson[i]['name'], categoriesJson[i]['id']));
+  //   }
+  //   listProfesions = profesionToAdd;
+  // }
 
   // @override
   // Future<void> initState() {
@@ -193,13 +200,7 @@ class _Home2ScreenState extends State<Home2Screen> {
   Widget build(BuildContext context) {
     var jobsProvider = Provider.of<Jobs>(context, listen: false);
     print('rebuild');
-    return FutureBuilder(
-        future: loadCategories(),
-        builder: (ctx, fut) {
-          if (fut.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else {
-            return SingleChildScrollView(
+    return SingleChildScrollView(
               child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -231,6 +232,7 @@ class _Home2ScreenState extends State<Home2Screen> {
       },
       onSelected: (String selection) {
         _selectedLocation = selection;
+        FocusManager.instance.primaryFocus?.unfocus();
         // debugPrint('You just selected $selection');
       },
     ),
@@ -245,27 +247,7 @@ class _Home2ScreenState extends State<Home2Screen> {
                     width: 384,
                     height: 36,
                     padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<Profesion>(
-                        isExpanded: true,
-                        hint: selectedProfesion != null
-                            ? Text(selectedProfesion.name)
-                            : Text(
-                                'Odaberite kategoriju'), // Not necessary for Option 1
-                        onChanged: (Profesion newValue) {
-                          setState(() {
-                            selectedProfesion = newValue;
-                            print(selectedProfesion.id);
-                          });
-                        },
-                        items: listProfesions.map((profesion) {
-                          return DropdownMenuItem<Profesion>(
-                            child: new Text(profesion.name),
-                            value: profesion,
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                    child: ProfesionSelect(getSelectedProfesion),
                   ),
                   Container(
                     height: 42,
@@ -401,6 +383,4 @@ class _Home2ScreenState extends State<Home2Screen> {
               ),
             );
           }
-        });
-  }
 }
