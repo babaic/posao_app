@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:posao_app/models/ITJob.dart';
 import 'package:posao_app/models/job.dart';
@@ -116,20 +117,27 @@ class Jobs with ChangeNotifier {
     return jobDetail;
   }
 
+  static Future<String> DzobsDetailsUrl() async {
+    var db = await FirebaseFirestore.instance.collection('urls').doc('dzobsDetails').get();
+    return db.get('url');
+  }
+
   Future<void> fetchJobsFrom_Dzobs(int page, [bool isQuery = false, String lokacija, String kategorija, String iskustvo]) async {
+    var url;
+    var db = await FirebaseFirestore.instance.collection('urls').doc('dzobsMain').get();
+    
+    url = db.get('url');
+    
     if (page == 1) {
       _itJobs = [];
     }
 
-    var url = 'https://www.dzobs.com/_next/data/wxfPjjwvHHk7eXIM8KPAk/poslovi/';
     var urlQueryPart = page.toString() + '.json';
 
     if(isQuery) {
-      print('it is query');
-      print(lokacija);
-      print(kategorija);
-      print(iskustvo);
-      url = 'https://www.dzobs.com/_next/data/wxfPjjwvHHk7eXIM8KPAk/pretraga.json?';
+      var db = await FirebaseFirestore.instance.collection('urls').doc('dzobsPretraga').get();
+      url = db.get('url');
+
       if(lokacija != null && lokacija != '') {
         url += 'lokacija=$lokacija&';
       }
@@ -150,7 +158,7 @@ class Jobs with ChangeNotifier {
       }
       urlQueryPart='&page=$page';
     }
-
+print(url + urlQueryPart);
     var response = await http.get(Uri.parse(url + urlQueryPart));
     //var response = await http.get(Uri.parse('https://raw.githubusercontent.com/babaic/remoteUrls/main/jobs.json'));
     print(url + urlQueryPart);
@@ -183,6 +191,7 @@ class Jobs with ChangeNotifier {
   Future<void> fetchAndSetJobs2(
       int showFrom, int showTo, String industry, String location) async {
     print('fetch and sets jobs');
+    print(location);
 
     //if it's first call clear old data
     if (showFrom == 0) {
@@ -398,7 +407,7 @@ class Jobs with ChangeNotifier {
 try {
   var urlQueryPart =
         '?firstResult=0&maxResults=20&jobstate=ALL&keyword=&location=&range=${range[1]}&industry=$industry&sortField=productCategory.basicPrice-dsc&sortField=aprovementDate-dsc';
-    const url = 'https://www.mojposao.ba/api/data/jobs';
+    const url = 'https://www.mojposao2.ba/api/data/jobs';
     var response = await http.get(Uri.parse(url + urlQueryPart));//vrati ovo!
     // var response = await http.get(Uri.parse(urlQueryPart));
     print('response status ${response.statusCode}');

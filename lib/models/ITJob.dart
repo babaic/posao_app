@@ -1,3 +1,6 @@
+import 'package:provider/provider.dart';
+
+import '../providers/jobs.dart';
 import 'job.dart';
 
 class ITJob extends Job {
@@ -12,8 +15,10 @@ class ITJob extends Job {
   String externalUrl;
 
   ITJob({id, company, endDate, startDate, title, this.level, this.department, this.isRemote, this.sallary, this.location, this.companySlug, this.jobSlug}) : super(company: company, id: id, endDate: endDate, startDate: startDate, title: title){
-    url = 'https://www.dzobs.com/_next/data/wxfPjjwvHHk7eXIM8KPAk/posao/$companySlug/$jobSlug.json';
-    externalUrl = 'https://www.dzobs.com/posao/$companySlug/$jobSlug';
+    Jobs.DzobsDetailsUrl().then((value) {
+      url = value+'$companySlug/$jobSlug.json';
+      externalUrl = 'https://www.dzobs.com/posao/$companySlug/$jobSlug';
+    });
   }
 }
 

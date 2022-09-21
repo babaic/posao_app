@@ -59,17 +59,17 @@ class JobDetailScreen extends StatelessWidget {
                         if (future.connectionState == ConnectionState.waiting) {
                           return CircularProgressIndicator();
                         } else {
-                          return FlatButton.icon(
+                          return TextButton(
                               onPressed: () =>
                                   Provider.of<Jobs>(context, listen: false)
                                       .saveJob(future.data),
-                              icon: future.data.saved
-                                  ? Icon(Icons.favorite, color: Colors.blue)
-                                  : Icon(
-                                      Icons.favorite_border,
-                                      color: Colors.blue,
-                                    ),
-                              label: Text(
+                              // icon: future.data.saved
+                              //     ? Icon(Icons.favorite, color: Colors.blue)
+                              //     : Icon(
+                              //         Icons.favorite_border,
+                              //         color: Colors.blue,
+                              //       ),
+                              child: Text(
                                 'SPASI',
                                 style: TextStyle(color: Colors.blue),
                               ));
@@ -81,7 +81,7 @@ class JobDetailScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.blue,
                       border: Border.all(color: Colors.blue, width: 1)),
-                  child: FlatButton(
+                  child: TextButton(
                       onPressed: () => _launchURL(
                           'https://www.mojposao.ba/#apply;jobId=$id'),
                       child: Text('Prijavi se',

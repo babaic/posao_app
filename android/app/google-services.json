@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "72012246386",
+    "project_id": "jabihposao-46ac0",
+    "storage_bucket": "jabihposao-46ac0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72012246386:android:2d9b142bb882dc53e401eb",
+        "android_client_info": {
+          "package_name": "com.travela.posao_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72012246386-9bppfjh1u8chguvdgfquc9vldnn39dmj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy5vHThEpXj5ZtvR9xuJyXjdsyzEbRn-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72012246386-9bppfjh1u8chguvdgfquc9vldnn39dmj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

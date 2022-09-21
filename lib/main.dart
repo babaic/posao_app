@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:posao_app/providers/jobs.dart';
 import 'package:posao_app/screens/display_it_jobs.screen.dart';
@@ -13,7 +14,9 @@ import 'providers/test.dart';
 import 'screens/jobs_categories2_screen.dart';
 import 'screens/test_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

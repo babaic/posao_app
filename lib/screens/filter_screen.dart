@@ -10,6 +10,14 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
 
+  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+    foregroundColor: Colors.black87, minimumSize: Size(88, 36),
+    padding: EdgeInsets.symmetric(horizontal: 16.0),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(2.0)),
+    ),
+);
+
   bool isLoading = true;
 
     @override
@@ -147,19 +155,21 @@ class _FilterScreenState extends State<FilterScreen> {
             Expanded(child: SizedBox(height: 10,)),
             Container(
               width: double.infinity,
-              child: FlatButton(
-                        color: Colors.blue[900],
-                        height: 40,
-                        onPressed: () => Navigator.of(context).pop({'lokacija': _selectedLocation, 'iskustvo': _selectedIskustvo, 'kategorija': _selectedCategory}),
-                        child: Text('Pretraga',
-                            style: TextStyle(color: Colors.white, fontSize: 18)),
-                        shape: RoundedRectangleBorder(
+              child: TextButton(
+            style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
                             side: BorderSide(
                                 color: Colors.white,
                                 width: 1,
                                 style: BorderStyle.solid),
                         ),
-                      ),
+              textStyle: const TextStyle(fontSize: 20),
+              backgroundColor: Colors.blue[900],
+              foregroundColor: Colors.white
+            ),
+            onPressed: () => Navigator.of(context).pop({'lokacija': _selectedLocation, 'iskustvo': _selectedIskustvo, 'kategorija': _selectedCategory}),
+            child: const Text('Filtriraj'),
+          ),
             )
           ],
         ),

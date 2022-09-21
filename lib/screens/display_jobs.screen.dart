@@ -24,11 +24,12 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   void showInSnackBar(String value, int duration, [String color]) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
       content: new Text(value),
       duration: Duration(seconds: duration),
       backgroundColor: color == null ? Colors.green[400] : color == 'red' ? Colors.red[500] : Colors.green[500]
     ));
+
   }
 
   @override
@@ -41,12 +42,12 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
         print('pageNumber $pageNumber');
         if (pageNumber != Provider.of<Jobs>(context, listen: false).totPage) {
           try {
-            showInSnackBar('Tražimo još poslova...', 20);
+            showInSnackBar('Tražimo još poslova...', 1);
             var res = await Provider.of<Jobs>(context, listen: false)
                 .fetchAndSetJobs2(
                     ++pageNumber * 10, 10, widget.industry, widget.location);
           } catch (error) {}
-          _scaffoldKey.currentState.hideCurrentSnackBar();
+          //_scaffoldKey.currentState.hideCurrentSnackBar();
         } else {
           showInSnackBar('Nemamo više poslova za prikazati :(', 4);
         }

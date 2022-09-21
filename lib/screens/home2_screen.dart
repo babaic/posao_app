@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:posao_app/providers/jobs.dart';
 import 'package:posao_app/screens/display_it_jobs.screen.dart';
 import 'package:posao_app/screens/it_job_detail_screen.dart';
@@ -35,6 +36,139 @@ class _Home2ScreenState extends State<Home2Screen> {
 
   List<Profesion> listProfesions = [];
   Profesion selectedProfesion;
+
+  static const List<String> _kOptions = <String>[
+    'Banovići',
+'Banja Luka',
+'Berkovići',
+'Bihać',
+'Bijeljina',
+'Bileća',
+'Bosanska Krupa',
+'Bosanski Brod',
+'Bosanski Petrovac',
+'Bosansko Grahovo',
+'Bratunac',
+'Brčko',
+'Breza',
+'Bugojno',
+'Busovača',
+'Bužim',
+'Cazin',
+'Čajniče',
+'Čapljina',
+'Čelić',
+'Čelinac',
+'Čitluk',
+'Derventa',
+'Doboj',
+'Doboj-Istok',
+'Doboj-Jug',
+'Dobretići',
+'Domaljevac-Šamac',
+'Donji Vakuf',
+'Donji Žabar',
+'Drvar',
+'Foča',
+'Fojnica',
+'Gacko',
+'Glamoč',
+'Goražde',
+'Gornji Vakuf - Uskoplje',
+'Gračanica',
+'Grad Mostar',
+'Gradačac',
+'Gradiška',
+'Grude',
+'Han Pijesak',
+'Istočna Ilidža',
+'Istočni Drvar',
+'Istočni Stari Grad',
+'Istočno Novo Sarajevo',
+'Jablanica',
+'Jajce',
+'Jezero',
+'Kakanj',
+'Kalesija',
+'Kalinovik',
+'Kiseljak',
+'Kladanj',
+'Ključ',
+'Kneževo',
+'Konjic',
+'Kostajnica',
+'Kotor Varoš',
+'Kozarska Dubica',
+'Kreševo',
+'Krupa na Uni',
+'Kupres',
+'Kupres-Blagaj',
+'Laktaši',
+'Livno',
+'Lopare',
+'Lukavac',
+'Ljubinje',
+'Ljubuški',
+'Maglaj',
+'Milići',
+'Modriča',
+'Mrkonjić Grad',
+'Neum',
+'Nevesinje',
+'Novi Grad',
+'Novi Travnik',
+'Odžak',
+'Olovo',
+'Orašje',
+'Osmaci',
+'Oštra Luka',
+'Pale',
+'Pelagićevo',
+'Petrovac-Drinić',
+'Petrovo',
+'Posušje',
+'Prijedor',
+'Prnjavor',
+'Prozor',
+'Ravno',
+'Ribnik',
+'Rogatica',
+'Rudo',
+'Sarajevo',
+'Sanski Most',
+'Sapna',
+'Skelani',
+'Sokolac',
+'Srbac',
+'Srebrenica',
+'Srebrenik',
+'Stolac',
+'Šamac',
+'Šipovo',
+'Široki Brijeg',
+'Teočak',
+'Teslić',
+'Tešanj',
+'Tomislavgrad',
+'Travnik',
+'Trebinje',
+'Tuzla',
+'Ugljevik',
+'Usora',
+'Ustiprača',
+'Vareš',
+'Velika Kladuša',
+'Visoko',
+'Višegrad',
+'Vitez',
+'Vlasenica',
+'Vukosavlje',
+'Zavidovići',
+'Zenica',
+'Zvornik',
+'Žepče',
+'Živinice'
+  ];
 
   Future<void> loadCategories() async {
     List<Profesion> profesionToAdd = new List<Profesion>();
@@ -86,25 +220,20 @@ class _Home2ScreenState extends State<Home2Screen> {
                     width: 384,
                     height: 36,
                     padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        isExpanded: true,
-                        hint: Text(
-                            'Odaberite lokaciju'), // Not necessary for Option 1
-                        value: _selectedLocation,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedLocation = newValue;
-                          });
-                        },
-                        items: _locations.map((location) {
-                          return DropdownMenuItem(
-                            child: new Text(location),
-                            value: location,
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                    child: Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text == '') {
+          return const Iterable<String>.empty();
+        }
+        return _kOptions.where((option) {
+          return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+        });
+      },
+      onSelected: (String selection) {
+        _selectedLocation = selection;
+        // debugPrint('You just selected $selection');
+      },
+    ),
                   ),
                   SizedBox(
                     height: 20,
@@ -142,9 +271,19 @@ class _Home2ScreenState extends State<Home2Screen> {
                     height: 42,
                     width: 257,
                     margin: EdgeInsets.only(top: 24),
-                    child: FlatButton(
-                      color: Colors.green,
-                      onPressed: () => selectedProfesion == null
+                    child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: Colors.white,
+                              width: 1,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(20)),
+              foregroundColor:
+                  Theme.of(context).colorScheme.onSecondaryContainer,
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+            onPressed: () => selectedProfesion == null
                           ? null
                           : Navigator.push(
                               context,
@@ -155,15 +294,26 @@ class _Home2ScreenState extends State<Home2Screen> {
                                         title: selectedProfesion.name,
                                         location: _selectedLocation,
                                       ))),
-                      child: Text('Pretraga',
-                          style: TextStyle(color: Colors.white, fontSize: 18)),
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(20)),
-                    ),
+            child: const Text('Pretraga'),
+          ),
+                    // child: TextButton(
+                    //   style: ButtonStyle(
+                    //     backgroundColor: Colors.red,
+                    //   ),
+                    //   onPressed: () => selectedProfesion == null
+                    //       ? null
+                    //       : Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (context) => DisplayJobsScreen(
+                    //                     industry: 'industry=' +
+                    //                         selectedProfesion.id.toString(),
+                    //                     title: selectedProfesion.name,
+                    //                     location: _selectedLocation,
+                    //                   ))),
+                    //   child: Text('Pretraga',
+                    //       style: TextStyle(color: Colors.white, fontSize: 18)),
+                    // ),
                   ),
                   SizedBox(height: 20,),
                   Container(

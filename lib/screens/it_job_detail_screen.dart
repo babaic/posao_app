@@ -73,7 +73,7 @@ class _ItJobDetailScreenState extends State<ItJobDetailScreen> {
                 decoration: BoxDecoration(
                     color: Colors.blue,
                     border: Border.all(color: Colors.blue, width: 1)),
-                child: FlatButton(
+                child: TextButton(
                     onPressed: () =>
                         _launchURL(jobsData.externalUrl),
                     child: Text('Prijavi se',
