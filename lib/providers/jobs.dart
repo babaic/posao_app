@@ -189,23 +189,34 @@ print(url + urlQueryPart);
   }
 
   Future<void> fetchAndSetJobs2(
-      int showFrom, int showTo, String industry, String location) async {
+      int showFrom, int showTo, String industry, String location, String keyword) async {
     print('fetch and sets jobs');
-    print(location);
+    print(keyword);
 
     //if it's first call clear old data
     if (showFrom == 0) {
       _jobs = [];
     }
-    print('industry ' + industry);
-    var urlQueryPart =
-        '?firstResult=$showFrom&maxResults=10&jobstate=ACTIVE&range=any&$industry&sortField=productCategory.basicPrice-dsc&sortField=aprovementDate-dsc';
-    if (location != null) {
-      urlQueryPart =
-          '?firstResult=$showFrom&maxResults=10&jobstate=ACTIVE&range=any&$industry&location=$location&sortField=productCategory.basicPrice-dsc&sortField=aprovementDate-dsc';
+    var urlQueryPart = '?firstResult=$showFrom&maxResults=10&jobstate=ACTIVE&range=any';
+    if(keyword != null) {
+      urlQueryPart += '&keyword=$keyword';
     }
+    if (location != null && location != '') {
+      urlQueryPart +='&location=$location';
+    }
+    if(industry != null && industry != '0') {
+      urlQueryPart += '&industry=$industry';
+    }
+    urlQueryPart += '&sortField=productCategory.basicPrice-dsc&sortField=aprovementDate-dsc';
+    // urlQueryPart =
+    //     '?firstResult=$showFrom&maxResults=10&jobstate=ACTIVE&range=any&$industry&sortField=productCategory.basicPrice-dsc&sortField=aprovementDate-dsc';
+    // if (location != null) {
+    //   urlQueryPart =
+    //       '?firstResult=$showFrom&maxResults=10&jobstate=ACTIVE&range=any&$industry&location=$location&sortField=productCategory.basicPrice-dsc&sortField=aprovementDate-dsc';
+    // }
 
     const url = 'https://www.mojposao.ba/api/data/jobs';
+    print('url ${url + urlQueryPart}');
     var response = await http.get(Uri.parse(url + urlQueryPart));
     print('response status ${response.statusCode}');
     var extractData = json.decode(utf8.decode(response.bodyBytes));

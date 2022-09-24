@@ -8,13 +8,7 @@ import '../GlobalVar.dart';
 import 'job_detail_screen.dart';
 
 class SavedJobsScreen extends StatelessWidget {
-  launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  void _launchURL(String _url) async => await launch(_url);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +28,25 @@ class SavedJobsScreen extends StatelessWidget {
                   return ListView.builder(
                   itemCount: jobsData.savedJobs.length,
                   itemBuilder: (ctx, index) {
-                    return InkWell(onTap: () => launchURL('https://www.mojposao.ba/#apply;jobId='+jobsData.savedJobs[index].id.toString()), child: JobTile(jobsData.savedJobs[index]));
+                    return InkWell(onTap: () => Navigator.of(context).push(PageRouteBuilder(
+                                transitionDuration:
+                                    Duration(milliseconds: 1000),
+                                pageBuilder: (context, animation,
+                                        secondaryAnimation) =>
+                                    JobDetailScreen(jobsData.savedJobs[index].id),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  var begin = Offset(0.0, 1.0);
+                                  var end = Offset.zero;
+                                  var tween = Tween(begin: begin, end: end);
+                                  var offsetAnimation = animation.drive(tween);
+
+                                  return SlideTransition(
+                                    position: offsetAnimation,
+                                    child: child,
+                                  );
+                                },
+                              )), child: JobTile(jobsData.savedJobs[index]));
                   });
                 }
               });

@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
                   tabs: [
                     Column(
                       children: [
-                        Tab(icon: Icon(Icons.home)),
+                        Tab(icon: Icon(Icons.search)),
                         Text(
                           'Pretraga',
                           style: TextStyle(fontSize: 12),

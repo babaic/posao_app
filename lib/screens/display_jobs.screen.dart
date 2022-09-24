@@ -9,9 +9,17 @@ import 'job_detail_screen.dart';
 class DisplayJobsScreen extends StatefulWidget {
   static const routeName = '/display-jobs';
   final String industry;
-  final String title;
+  String title;
   final String location;
-  DisplayJobsScreen({this.industry, this.title, this.location});
+  final String keyword;
+  DisplayJobsScreen({this.industry, String title, this.location, this.keyword}) {
+    if(industry == '0') {
+      this.title = keyword;
+    }
+    else {
+      this.title = title;
+    }
+  }
 
   @override
   _DisplayJobsScreenState createState() => _DisplayJobsScreenState();
@@ -45,7 +53,7 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
             showInSnackBar('Tražimo još poslova...', 1);
             var res = await Provider.of<Jobs>(context, listen: false)
                 .fetchAndSetJobs2(
-                    ++pageNumber * 10, 10, widget.industry, widget.location);
+                    ++pageNumber * 10, 10, widget.industry, widget.location, widget.keyword);
           } catch (error) {}
           //_scaffoldKey.currentState.hideCurrentSnackBar();
         } else {
@@ -68,7 +76,7 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
-        actions: [
+        actions: widget.industry != '0' ? [
     FutureBuilder(future: Provider.of<Jobs>(context, listen: false).isCategorySaved(widget.industry), builder: (ctx, futureSnapshot) {
       if(futureSnapshot.connectionState == ConnectionState.done) {
         isCategorySaved = futureSnapshot.data;
@@ -89,11 +97,11 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
       }
     }),
     // add more IconButton
-  ],
+  ]: null,
       ),
       body: FutureBuilder(
         future: Provider.of<Jobs>(context, listen: false)
-            .fetchAndSetJobs2(0, 10, widget.industry, widget.location),
+            .fetchAndSetJobs2(0, 10, widget.industry, widget.location, widget.keyword),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(

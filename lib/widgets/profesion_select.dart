@@ -26,7 +26,7 @@ class _ProfesionSelectState extends State<ProfesionSelect> {
     final categoriesJson = json.decode(data);
     for (var i = 0; i < categoriesJson.length; i++) {
       profesionToAdd
-          .add(Profesion(categoriesJson[i]['name'], categoriesJson[i]['id']));
+          .add(Profesion( categoriesJson[i]['name'], categoriesJson[i]['id']));
     }
     listProfesions = profesionToAdd;
   }
@@ -43,9 +43,9 @@ class _ProfesionSelectState extends State<ProfesionSelect> {
               child: DropdownButton<Profesion>(
                 isExpanded: true,
                 hint: selectedProfesion != null
-                    ? Text(selectedProfesion.name)
+                    ? Text(selectedProfesion.name, style: TextStyle(color: Colors.black),)
                     : Text(
-                        'Odaberite kategoriju'), // Not necessary for Option 1
+                        'Odaberite kategoriju', style: TextStyle(color: Colors.black),), // Not necessary for Option 1
                 onChanged: (Profesion newValue) {
                   setState(() {
                     selectedProfesion = newValue;
@@ -55,7 +55,7 @@ class _ProfesionSelectState extends State<ProfesionSelect> {
                 },
                 items: listProfesions.map((profesion) {
                   return DropdownMenuItem<Profesion>(
-                    child: new Text(profesion.name),
+                    child: new Text(profesion.name, style: TextStyle(color: Colors.black),),
                     value: profesion,
                   );
                 }).toList(),

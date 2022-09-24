@@ -22,7 +22,7 @@ class _JobsCategories2ScreenState extends State<JobsCategories2Screen> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    industry == 9999 ? DisplayItJobsScreen() : DisplayJobsScreen(industry: 'industry=$industry', title: name,)
+                    industry == 9999 ? DisplayItJobsScreen() : DisplayJobsScreen(industry: '$industry', title: name,)
                     )));
   }
 

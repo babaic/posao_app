@@ -25,7 +25,10 @@ class Profesion {
 
 class _Home2ScreenState extends State<Home2Screen> {
   List<Map<String, dynamic>> categories = new List<Map<String, dynamic>>();
-
+  final zanimanjeControler = TextEditingController();
+  final _selectedLocation = TextEditingController();
+  var _selectedLocation2 = '';
+  
   List<String> _locations = [
     'Sarajevo',
     'Zenica',
@@ -33,8 +36,8 @@ class _Home2ScreenState extends State<Home2Screen> {
     'Banja Luka',
     'Tuzla'
   ]; // Option 2,
-  String _selectedLocation; // Option 2
-  Profesion selectedProfesion;
+  
+  Profesion selectedProfesion = Profesion("Pretraga", 0);
 
   void getSelectedProfesion(var profesion) {
     selectedProfesion = profesion;
@@ -46,135 +49,121 @@ class _Home2ScreenState extends State<Home2Screen> {
 
   static const List<String> _kOptions = <String>[
     'Banovići',
-'Banja Luka',
-'Berkovići',
-'Bihać',
-'Bijeljina',
-'Bileća',
-'Bosanska Krupa',
-'Bosanski Brod',
-'Bosanski Petrovac',
-'Bosansko Grahovo',
-'Bratunac',
-'Brčko',
-'Breza',
-'Bugojno',
-'Busovača',
-'Bužim',
-'Cazin',
-'Čajniče',
-'Čapljina',
-'Čelić',
-'Čelinac',
-'Čitluk',
-'Derventa',
-'Doboj',
-'Doboj-Istok',
-'Doboj-Jug',
-'Dobretići',
-'Domaljevac-Šamac',
-'Donji Vakuf',
-'Donji Žabar',
-'Drvar',
-'Foča',
-'Fojnica',
-'Gacko',
-'Glamoč',
-'Goražde',
-'Gornji Vakuf - Uskoplje',
-'Gračanica',
-'Mostar',
-'Gradačac',
-'Gradiška',
-'Grude',
-'Han Pijesak',
-'Istočna Ilidža',
-'Istočni Drvar',
-'Istočni Stari Grad',
-'Istočno Novo Sarajevo',
-'Jablanica',
-'Jajce',
-'Jezero',
-'Kakanj',
-'Kalesija',
-'Kalinovik',
-'Kiseljak',
-'Kladanj',
-'Ključ',
-'Kneževo',
-'Konjic',
-'Kostajnica',
-'Kotor Varoš',
-'Kozarska Dubica',
-'Kreševo',
-'Krupa na Uni',
-'Kupres',
-'Kupres-Blagaj',
-'Laktaši',
-'Livno',
-'Lopare',
-'Lukavac',
-'Ljubinje',
-'Ljubuški',
-'Maglaj',
-'Milići',
-'Modriča',
-'Mrkonjić Grad',
-'Neum',
-'Nevesinje',
-'Novi Grad',
-'Novi Travnik',
-'Odžak',
-'Olovo',
-'Orašje',
-'Osmaci',
-'Oštra Luka',
-'Pale',
-'Pelagićevo',
-'Petrovac-Drinić',
-'Petrovo',
-'Posušje',
-'Prijedor',
-'Prnjavor',
-'Prozor',
-'Ravno',
-'Ribnik',
-'Rogatica',
-'Rudo',
-'Sarajevo',
-'Sanski Most',
-'Sapna',
-'Skelani',
-'Sokolac',
-'Srbac',
-'Srebrenica',
-'Srebrenik',
-'Stolac',
-'Šamac',
-'Šipovo',
-'Široki Brijeg',
-'Teočak',
-'Teslić',
-'Tešanj',
-'Tomislavgrad',
-'Travnik',
-'Trebinje',
-'Tuzla',
-'Ugljevik',
-'Usora',
-'Ustiprača',
-'Vareš',
-'Velika Kladuša',
-'Visoko',
-'Višegrad',
-'Vitez',
-'Vlasenica',
-'Vukosavlje',
-'Zavidovići',
-'Zenica',
-'Zvornik',
-'Žepče',
-'Živinice'
+    'Banja Luka',
+    'Berkovići',
+    'Bihać',
+    'Bijeljina',
+    'Bileća',
+    'Bosanska Krupa',
+    'Bosanski Brod',
+    'Bosanski Petrovac',
+    'Bosansko Grahovo',
+    'Bratunac',
+    'Brčko',
+    'Breza',
+    'Bugojno',
+    'Busovača',
+    'Bužim',
+    'Cazin',
+    'Čajniče',
+    'Čapljina',
+    'Čelić',
+    'Čelinac',
+    'Čitluk',
+    'Derventa',
+    'Doboj',
+    'Donji Vakuf',
+    'Drvar',
+    'Foča',
+    'Fojnica',
+    'Gacko',
+    'Glamoč',
+    'Goražde',
+    'Gornji Vakuf - Uskoplje',
+    'Gračanica',
+    'Mostar',
+    'Gradačac',
+    'Gradiška',
+    'Grude',
+    'Han Pijesak',
+    'Jablanica',
+    'Jajce',
+    'Jezero',
+    'Kakanj',
+    'Kalesija',
+    'Kalinovik',
+    'Kiseljak',
+    'Kladanj',
+    'Ključ',
+    'Kneževo',
+    'Konjic',
+    'Kostajnica',
+    'Kotor Varoš',
+    'Kozarska Dubica',
+    'Kreševo',
+    'Kupres',
+    'Laktaši',
+    'Livno',
+    'Lopare',
+    'Lukavac',
+    'Ljubinje',
+    'Ljubuški',
+    'Maglaj',
+    'Milići',
+    'Modriča',
+    'Neum',
+    'Nevesinje',
+    'Novi Grad',
+    'Novi Travnik',
+    'Odžak',
+    'Olovo',
+    'Orašje',
+    'Osmaci',
+    'Oštra Luka',
+    'Pale',
+    'Petrovo',
+    'Posušje',
+    'Prijedor',
+    'Prnjavor',
+    'Prozor',
+    'Ravno',
+    'Ribnik',
+    'Rogatica',
+    'Rudo',
+    'Sarajevo',
+    'Sanski Most',
+    'Sapna',
+    'Skelani',
+    'Sokolac',
+    'Srbac',
+    'Srebrenica',
+    'Srebrenik',
+    'Stolac',
+    'Šamac',
+    'Šipovo',
+    'Široki Brijeg',
+    'Teočak',
+    'Teslić',
+    'Tešanj',
+    'Tomislavgrad',
+    'Travnik',
+    'Trebinje',
+    'Tuzla',
+    'Ugljevik',
+    'Usora',
+    'Ustiprača',
+    'Vareš',
+    'Velika Kladuša',
+    'Visoko',
+    'Višegrad',
+    'Vitez',
+    'Vlasenica',
+    'Vukosavlje',
+    'Zavidovići',
+    'Zenica',
+    'Zvornik',
+    'Žepče',
+    'Živinice'
   ];
 
   // Future<void> loadCategories() async {
@@ -201,186 +190,242 @@ class _Home2ScreenState extends State<Home2Screen> {
     var jobsProvider = Provider.of<Jobs>(context, listen: false);
     print('rebuild');
     return SingleChildScrollView(
-              child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 210,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: const AssetImage("assets/header.png"),
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 210,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: const AssetImage("assets/header.png"),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Color.fromARGB(214, 225, 218, 218),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            width: 384,
+            height: 40,
+            padding: EdgeInsets.only(left: 20),
+            child: TextField(
+                        style: TextStyle(color: Colors.black),
+                        controller: zanimanjeControler,
+                        decoration: new InputDecoration(
+                          hintText: "Unesite zanimanje",
+                          hintStyle: TextStyle(color: Colors.black),
+                          border: InputBorder.none,
+                        ),
+                      ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Color.fromARGB(214, 225, 218, 218),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            width: 384,
+            height: 40,
+            padding: EdgeInsets.only(left:20),
+            child: Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text == '') {
+                  return const Iterable<String>.empty();
+                }
+                return _kOptions.where((option) {
+                  var result = option
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase());
+                  return result;
+                });
+              },
+              displayStringForOption: (value) => value,
+              fieldViewBuilder: ((context, _selectedLocation, focusNode,
+                      onFieldSubmitted) =>
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0),
+                    child: TextField(
+                      onChanged: (val) => _selectedLocation2 = val,
+                      style: TextStyle(color: Colors.black),
+                      controller: _selectedLocation,
+                      focusNode: focusNode,
+                      decoration: new InputDecoration(
+                        hintText: "Unesite grad",
+                        hintStyle: TextStyle(color: Colors.black),
+                        border: InputBorder.none,
                       ),
                     ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(196, 196, 196, 40),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    width: 384,
-                    height: 36,
-                    padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
-                    child: Autocomplete<String>(
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text == '') {
-          return const Iterable<String>.empty();
-        }
-        return _kOptions.where((option) {
-          return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
-        });
-      },
-      onSelected: (String selection) {
-        _selectedLocation = selection;
-        FocusManager.instance.primaryFocus?.unfocus();
-        // debugPrint('You just selected $selection');
-      },
-    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(196, 196, 196, 40),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    width: 384,
-                    height: 36,
-                    padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
-                    child: ProfesionSelect(getSelectedProfesion),
-                  ),
-                  Container(
-                    height: 42,
-                    width: 257,
-                    margin: EdgeInsets.only(top: 24),
-                    child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(20)),
-              foregroundColor:
-                  Theme.of(context).colorScheme.onSecondaryContainer,
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-            ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-            onPressed: () => selectedProfesion == null
-                          ? null
-                          : Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DisplayJobsScreen(
-                                        industry: 'industry=' +
-                                            selectedProfesion.id.toString(),
-                                        title: selectedProfesion.name,
-                                        location: _selectedLocation,
-                                      ))),
-            child: const Text('Pretraga'),
+                  )),
+              onSelected: (String selection) {
+                print('selected $selection');
+                _selectedLocation2 = selection;
+                FocusManager.instance.primaryFocus?.unfocus();
+                // debugPrint('You just selected $selection');
+              },
+            ),
           ),
-                    // child: TextButton(
-                    //   style: ButtonStyle(
-                    //     backgroundColor: Colors.red,
-                    //   ),
-                    //   onPressed: () => selectedProfesion == null
-                    //       ? null
-                    //       : Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //               builder: (context) => DisplayJobsScreen(
-                    //                     industry: 'industry=' +
-                    //                         selectedProfesion.id.toString(),
-                    //                     title: selectedProfesion.name,
-                    //                     location: _selectedLocation,
-                    //                   ))),
-                    //   child: Text('Pretraga',
-                    //       style: TextStyle(color: Colors.white, fontSize: 18)),
-                    // ),
-                  ),
-                  SizedBox(height: 20,),
-                  Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(5),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Novi poslovi',
-                                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  'Iz kategorija koje pratite',
-                                  style: TextStyle(fontSize: 12),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(flex: 2, child: Icon(Icons.add_circle, color: Colors.grey[400],))
-                        ],
-                      )),
-                  FutureBuilder(future: Provider.of<Jobs>(context, listen: false).getJobsFromCategoryInterest(), builder: (ctx, futureSnapshot) {
-                    if(futureSnapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    }
-                    else if(Provider.of<Jobs>(context, listen: false).jobs.length == 0) {
-                       return Center(child: Container(padding: EdgeInsets.only(top: 40), child: Text('Nema poslova'))); 
-                      }
-                    else {
-                      return Container(
-                      height: 160,
-                      child: ListView.builder(scrollDirection: Axis.horizontal, itemCount: Provider.of<Jobs>(context, listen: false).jobs.length, itemBuilder: (context, index) => InkWell(
-                        child: Container(
-                            margin: EdgeInsets.all(5),
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                            width: 160.0,
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                              children: [
-                                Container(
-                                  height: 80,
-                                  child: Image.network(jobsProvider.jobs[index].company.photo),
-                                ),
-                                Text(jobsProvider.jobs[index].title, style: TextStyle(overflow: TextOverflow.ellipsis),),
-                                Text(jobsProvider.jobs[index].company.name, style: TextStyle(overflow: TextOverflow.ellipsis)),
-                                Text(jobsProvider.jobs[index].company.city, style: TextStyle(overflow: TextOverflow.ellipsis))
-                              ],
-                            ),
-                            ),
-                          ),
-                          onTap: () =>
-                              Navigator.of(context).push(PageRouteBuilder(
-                                transitionDuration:
-                                    Duration(milliseconds: 1000),
-                                pageBuilder: (context, animation,
-                                        secondaryAnimation) =>
-                                    JobDetailScreen(jobsProvider.jobs[index].id),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  var begin = Offset(0.0, 1.0);
-                                  var end = Offset.zero;
-                                  var tween = Tween(begin: begin, end: end);
-                                  var offsetAnimation = animation.drive(tween);
-
-                                  return SlideTransition(
-                                    position: offsetAnimation,
-                                    child: child,
-                                  );
-                                },
-                              ))
-                      )));
-                    }
-                  }
-                      
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Color.fromARGB(214, 225, 218, 218),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            width: 384,
+            height: 40,
+            padding: EdgeInsets.only(left: 20),
+            child: ProfesionSelect(getSelectedProfesion),
+          ),
+          Container(
+            height: 42,
+            width: 257,
+            margin: EdgeInsets.only(top: 24),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.white,
+                        width: 1,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(20)),
+                foregroundColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
+              ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+              onPressed: () {
+                print(_selectedLocation2);
+                selectedProfesion.id == 0 && zanimanjeControler.text == null && _selectedLocation == null ? null : Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DisplayJobsScreen(
+                                industry: selectedProfesion.id.toString(),
+                                title: selectedProfesion.name,
+                                location: _selectedLocation2,
+                                keyword: zanimanjeControler.text,
+                              )));
+              },
+              child: const Text('Pretraga'),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Novi poslovi',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.start,
+                        ),
+                        Text(
+                          'Iz kategorija koje pratite',
+                          style: TextStyle(fontSize: 12),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
                     ),
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: Icon(
+                        Icons.add_circle,
+                        color: Colors.grey[400],
+                      ))
                 ],
-              ),
-            );
-          }
+              )),
+          FutureBuilder(
+              future: Provider.of<Jobs>(context, listen: false)
+                  .getJobsFromCategoryInterest(),
+              builder: (ctx, futureSnapshot) {
+                if (futureSnapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (Provider.of<Jobs>(context, listen: false)
+                        .jobs
+                        .length ==
+                    0) {
+                  return Center(
+                      child: Container(
+                          padding: EdgeInsets.only(top: 40),
+                          child: Text('Nema poslova')));
+                } else {
+                  return Container(
+                      height: 160,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: Provider.of<Jobs>(context, listen: false)
+                              .jobs
+                              .length,
+                          itemBuilder: (context, index) => InkWell(
+                              child: Container(
+                                margin: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black)),
+                                width: 160.0,
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 80,
+                                        child: Image.network(jobsProvider
+                                            .jobs[index].company.photo),
+                                      ),
+                                      Text(
+                                        jobsProvider.jobs[index].title,
+                                        style: TextStyle(
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                      Text(
+                                          jobsProvider.jobs[index].company.name,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.ellipsis)),
+                                      Text(
+                                          jobsProvider.jobs[index].company.city,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.ellipsis))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              onTap: () =>
+                                  Navigator.of(context).push(PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 1000),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        JobDetailScreen(
+                                            jobsProvider.jobs[index].id),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      var begin = Offset(0.0, 1.0);
+                                      var end = Offset.zero;
+                                      var tween = Tween(begin: begin, end: end);
+                                      var offsetAnimation =
+                                          animation.drive(tween);
+
+                                      return SlideTransition(
+                                        position: offsetAnimation,
+                                        child: child,
+                                      );
+                                    },
+                                  )))));
+                }
+              }),
+        ],
+      ),
+    );
+  }
 }
