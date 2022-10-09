@@ -194,121 +194,125 @@ class _Home2ScreenState extends State<Home2Screen> {
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: MediaQuery.of(context).size.width,
-            height: 210,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: const AssetImage("assets/header.png"),
+            height: 400,
+            child: Stack(
+              alignment: AlignmentDirectional.topCenter,
+              children: [
+                Container(
+              width: MediaQuery.of(context).size.width,
+              height: 360,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: const AssetImage("assets/header.png"),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: Color.fromARGB(214, 225, 218, 218),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            width: 384,
-            height: 40,
-            padding: EdgeInsets.only(left: 20),
-            child: TextField(
-                        style: TextStyle(color: Colors.black),
-                        controller: zanimanjeControler,
-                        decoration: new InputDecoration(
-                          hintText: "Unesite zanimanje",
-                          hintStyle: TextStyle(color: Colors.black),
-                          border: InputBorder.none,
-                        ),
-                      ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: Color.fromARGB(214, 225, 218, 218),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            width: 384,
-            height: 40,
-            padding: EdgeInsets.only(left:20),
-            child: Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text == '') {
-                  return const Iterable<String>.empty();
-                }
-                return _kOptions.where((option) {
-                  var result = option
-                      .toLowerCase()
-                      .contains(textEditingValue.text.toLowerCase());
-                  return result;
-                });
-              },
-              displayStringForOption: (value) => value,
-              fieldViewBuilder: ((context, _selectedLocation, focusNode,
-                      onFieldSubmitted) =>
-                  Padding(
-                    padding: const EdgeInsets.only(top: 0),
-                    child: TextField(
-                      onChanged: (val) => _selectedLocation2 = val,
-                      style: TextStyle(color: Colors.black),
-                      controller: _selectedLocation,
-                      focusNode: focusNode,
-                      decoration: new InputDecoration(
-                        hintText: "Unesite grad",
-                        hintStyle: TextStyle(color: Colors.black),
-                        border: InputBorder.none,
-                      ),
+            Positioned(
+              top: 170,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
                     ),
-                  )),
-              onSelected: (String selection) {
-                print('selected $selection');
-                _selectedLocation2 = selection;
-                FocusManager.instance.primaryFocus?.unfocus();
-                // debugPrint('You just selected $selection');
-              },
+                width: 324,
+                height: 40,
+                padding: EdgeInsets.only(left: 20),
+                child: TextField(
+                            style: TextStyle(color: Colors.black),
+                            controller: zanimanjeControler,
+                            decoration: new InputDecoration(
+                              hintText: "Zanimanje ili kompanija",
+                              hintStyle: TextStyle(color: Colors.black),
+                              border: InputBorder.none,
+                            ),
+                          ),
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: Color.fromARGB(214, 225, 218, 218),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            width: 384,
-            height: 40,
-            padding: EdgeInsets.only(left: 20),
-            child: ProfesionSelect(getSelectedProfesion),
-          ),
-          Container(
-            height: 42,
-            width: 257,
-            margin: EdgeInsets.only(top: 24),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.white,
-                        width: 1,
-                        style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(20)),
-                foregroundColor:
-                    Theme.of(context).colorScheme.onSecondaryContainer,
-                backgroundColor:
-                    Theme.of(context).colorScheme.secondaryContainer,
-              ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-              onPressed: () {
-                print(_selectedLocation2);
-                selectedProfesion.id == 0 && zanimanjeControler.text == null && _selectedLocation == null ? null : Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DisplayJobsScreen(
-                                industry: selectedProfesion.id.toString(),
-                                title: selectedProfesion.name,
-                                location: _selectedLocation2,
-                                keyword: zanimanjeControler.text,
-                              )));
-              },
-              child: const Text('Pretraga'),
+            Positioned(
+              top: 220,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    ),
+                width: 324,
+                height: 40,
+                padding: EdgeInsets.only(left:20),
+                child: Autocomplete<String>(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text == '') {
+                      return const Iterable<String>.empty();
+                    }
+                    return _kOptions.where((option) {
+                      var result = option
+                          .toLowerCase()
+                          .contains(textEditingValue.text.toLowerCase());
+                      return result;
+                    });
+                  },
+                  displayStringForOption: (value) => value,
+                  fieldViewBuilder: ((context, _selectedLocation, focusNode,
+                          onFieldSubmitted) =>
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0),
+                        child: TextField(
+                          onChanged: (val) => _selectedLocation2 = val,
+                          style: TextStyle(color: Colors.black),
+                          controller: _selectedLocation,
+                          focusNode: focusNode,
+                          decoration: new InputDecoration(
+                            hintText: "Lokacija",
+                            hintStyle: TextStyle(color: Colors.black),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      )),
+                  onSelected: (String selection) {
+                    print('selected $selection');
+                    _selectedLocation2 = selection;
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    // debugPrint('You just selected $selection');
+                  },
+                ),
+              ),
+            ),
+            ProfesionSelect(getSelectedProfesion),
+            Positioned(
+              bottom: 20,
+              child: Container(
+                height: 42,
+                width: 324,
+                margin: EdgeInsets.only(top: 24),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                            style: BorderStyle.solid),
+                        ),
+                    foregroundColor:
+                        Theme.of(context).colorScheme.onSecondaryContainer,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.secondaryContainer,
+                  ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+                  onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    print(_selectedLocation2);
+                    selectedProfesion.id == 0 && zanimanjeControler.text == null && _selectedLocation == null ? null : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DisplayJobsScreen(
+                                    industry: selectedProfesion.id.toString(),
+                                    title: selectedProfesion.name,
+                                    location: _selectedLocation2,
+                                    keyword: zanimanjeControler.text,
+                                  )));
+                  },
+                  child: const Text('Pretraga', style: TextStyle(fontSize: 18),),
+                ),
+              ),
+            )
+              ],
             ),
           ),
           SizedBox(

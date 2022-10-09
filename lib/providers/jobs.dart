@@ -305,6 +305,7 @@ print(url + urlQueryPart);
   }
 
   Future<void> saveJob(Job jobData) async {
+    print('save job');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
     //1. get old data
