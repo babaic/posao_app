@@ -81,7 +81,7 @@ class _DisplayJobsScreenState extends State<DisplayJobsScreen> {
       if(futureSnapshot.connectionState == ConnectionState.done) {
         isCategorySaved = futureSnapshot.data;
         return IconButton(
-      icon: isCategorySaved == true ? Icon(Icons.remove_circle) : Icon(Icons.add_circle),
+      icon: isCategorySaved == true ? Icon(Icons.notifications_active) : Icon(Icons.notifications_none),
       onPressed: () {
         Provider.of<Jobs>(context, listen: false).saveCategoryAsInterest(widget.industry, widget.title).then((value) {
           showInSnackBar(isCategorySaved ? 'Ne pratite kategoriju više' : 'Pratite kategoriju', 4, isCategorySaved ? 'red' : 'green');

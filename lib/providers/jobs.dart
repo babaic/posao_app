@@ -1,10 +1,16 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:posao_app/models/ITJob.dart';
 import 'package:posao_app/models/job.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+enum NotificationStatus {
+  subscribe,
+  unsubscribe
+}
 
 class Jobs with ChangeNotifier {
   List<Job> _jobs = [];
@@ -52,11 +58,9 @@ class Jobs with ChangeNotifier {
   }
 
   Future<ITJobDetail> getJobDetailFrom_Dzobs(String url) async {
-    print(url);
     // url = 'https://raw.githubusercontent.com/babaic/remoteUrls/main/jobdetail.json';
     var response = await http.get(Uri.parse(url));
     var extractData = json.decode(utf8.decode(response.bodyBytes));
-    print(response.statusCode);
     var opisPoslaJson = json.decode(extractData['pageProps']['job']['opisPosla']);
     var opisPosla = '';
     var oKompanijiJson = json.decode(extractData['pageProps']['job']['oKompaniji']);
@@ -158,14 +162,10 @@ class Jobs with ChangeNotifier {
       }
       urlQueryPart='&page=$page';
     }
-print(url + urlQueryPart);
     var response = await http.get(Uri.parse(url + urlQueryPart));
     //var response = await http.get(Uri.parse('https://raw.githubusercontent.com/babaic/remoteUrls/main/jobs.json'));
-    print(url + urlQueryPart);
-    print('response status ${response.statusCode}');
     var extractData = json.decode(utf8.decode(response.bodyBytes));
     totalPages = extractData['pageProps']['total'] / 12;
-    print('total $totalPages');
     List<ITJob> jobsToAdd = List<ITJob>();
     for(var i = 0; i < extractData['pageProps']['jobs'].length; i++) {
       jobsToAdd.add(ITJob(
@@ -184,14 +184,12 @@ print(url + urlQueryPart);
       ));
     }
     _itJobs = _itJobs + jobsToAdd;
-    print('jobs ${_itJobs.length}');
     notifyListeners();
   }
 
   Future<void> fetchAndSetJobs2(
       int showFrom, int showTo, String industry, String location, String keyword) async {
-    print('fetch and sets jobs');
-    print(keyword);
+
 
     //if it's first call clear old data
     if (showFrom == 0) {
@@ -216,12 +214,9 @@ print(url + urlQueryPart);
     // }
 
     const url = 'https://www.mojposao.ba/api/data/jobs';
-    print('url ${url + urlQueryPart}');
     var response = await http.get(Uri.parse(url + urlQueryPart));
-    print('response status ${response.statusCode}');
     var extractData = json.decode(utf8.decode(response.bodyBytes));
     totalPages = extractData['totalCount'] / 10;
-    print(totPage);
     List<Job> jobsToAdd = new List<Job>();
     for (var i = 0; i < extractData['list'].length; i++) {
       var companyId = extractData['list'][i]['company']['id'];
@@ -260,7 +255,6 @@ print(url + urlQueryPart);
   }
 
   Future<void> fetchAndSetJobs0() async {
-    print('fetchAndSetJobs');
     return Future.delayed(Duration(seconds: 1), () {
       _jobs = [];
 
@@ -280,12 +274,10 @@ print(url + urlQueryPart);
             workers: 2));
       }
       _jobs = _jobs + loadedJobsToAdd;
-      print(loadedJobsToAdd.length);
     });
   }
 
   Future<dynamic> getJobById(int id) async {
-    print('getJobById');
     var response = await http.get(Uri.parse(
         'https://www.mojposao.ba/api/data/jobs/$id?view=ba.posao.module.api.server.mixins.Views%24ExtendedPublic'));
     var extractData = json.decode(utf8.decode(response.bodyBytes));
@@ -300,12 +292,10 @@ print(url + urlQueryPart);
   }
 
   Future<Job> selectedJob(int id) async {
-    print(id);
     return _jobs.firstWhere((element) => element.id == id);
   }
 
   Future<void> saveJob(Job jobData) async {
-    print('save job');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
     //1. get old data
@@ -320,7 +310,6 @@ print(url + urlQueryPart);
         var decodedJob = json.decode(savedJobs[i]);
         if (decodedJob['id'] == jobData.id) {
           index = i;
-          print(index);
           exist = true;
         }
       }
@@ -336,12 +325,10 @@ print(url + urlQueryPart);
         }
         savedJobs = newList;
         ids = savedJobs;
-        print(_jobs.length);
         if (_jobs.length > 0) {
           var actualJob = _jobs.firstWhere(
               (element) => element.id == jobData.id,
               orElse: () => null);
-          print(actualJob);
           if (actualJob != null) {
             actualJob.saved = false;
           }
@@ -397,7 +384,6 @@ print(url + urlQueryPart);
     }
     for (var i = 0; i < savedCategories.length; i++) {
         var decodedCategories = json.decode(savedCategories[i]);
-        print(decodedCategories);
         if (industry == decodedCategories['industry']) {
           return true;
         }
@@ -419,10 +405,9 @@ print(url + urlQueryPart);
 try {
   var urlQueryPart =
         '?firstResult=0&maxResults=20&jobstate=ALL&keyword=&location=&range=${range[1]}&industry=$industry&sortField=productCategory.basicPrice-dsc&sortField=aprovementDate-dsc';
-    const url = 'https://www.mojposao2.ba/api/data/jobs';
+    const url = 'https://www.mojposao.ba/api/data/jobs';
     var response = await http.get(Uri.parse(url + urlQueryPart));//vrati ovo!
     // var response = await http.get(Uri.parse(urlQueryPart));
-    print('response status ${response.statusCode}');
     var extractData = json.decode(utf8.decode(response.bodyBytes));
     totalPages = extractData['totalCount'] / 10;
     List<Job> jobsToAdd = new List<Job>();
@@ -475,13 +460,13 @@ try {
         var decodedCategories = json.decode(savedCategories[i]);
         if (decodedCategories['industry'] == industry) {
           index = i;
-          print(index);
           exist = true;
+          //remove category from notification
+        await setCategoryNotification(industry, NotificationStatus.unsubscribe);
         }
       }
 
       if (exist) {
-        print('EXIST');
         List<String> newList = new List<String>();
         for (var i = 0; i < savedCategories.length; i++) {
           if (i == index) {
@@ -492,22 +477,14 @@ try {
         }
         savedCategories = newList;
         mySavedCategories = savedCategories;
-        print(_jobs.length);
-        // if (_jobs.length > 0) {
-        //   var actualJob = _jobs.firstWhere(
-        //       (element) => element.id == jobData.id,
-        //       orElse: () => null);
-        //   print(actualJob);
-        //   if (actualJob != null) {
-        //     actualJob.saved = false;
-        //   }
-        // }
+
       } else {
         mySavedCategories = savedCategories;
         mySavedCategories.add(json.encode({
           'industry': industry,
           'title': title,
         }));
+        await setCategoryNotification(industry, NotificationStatus.subscribe);
       }
     }
     else {
@@ -519,7 +496,72 @@ try {
 
     prefs.setStringList('savedCategories', mySavedCategories);
     var yourList = prefs.getStringList('savedCategories');
-    print('saved categories $yourList');
+    //print('saved categories $yourList');
     isCategorySaved(industry);
+    //_handleGetPermissionSubscriptionState(industry);
   }
+
+  Future<void> _handleGetPermissionSubscriptionState(String category) async {
+    OneSignal.shared.getDeviceState().then((deviceState) {
+      print("OneSignal: device state: ${deviceState.userId}");
+
+      final data = <String, String>{
+      "category": category,
+      "playerId": deviceState.userId,
+      "datetime": DateTime.now().toString()
+    };
+
+    FirebaseFirestore.instance
+        .collection("notifications")
+        .doc(category).collection('users').doc(deviceState.userId)
+        .set(data)
+        .onError((e, _) => print("Error writing document: $e"));
+
+    });
+
+    // final data = <String, String>{
+    //   "category": category,
+    //   "playerId": "CA",
+    //   "country": "USA"
+    // };
+
+    // FirebaseFirestore.instance
+    //     .collection("notifications")
+    //     .doc()
+    //     .set(data)
+    //     .onError((e, _) => print("Error writing document: $e"));
+
+  }
+  
+  Future<void> setCategoryNotification(String category, NotificationStatus notificationStatus) async {
+    OneSignal.shared.getDeviceState().then((deviceState) {
+      print("OneSignal: device state: ${deviceState.userId}");
+
+      final data = <String, String>{
+      "playerId": deviceState.userId,
+      "datetime": DateTime.now().toString()
+    };
+
+    final catData = <String, String>{
+      "category": category,
+      "datetime": DateTime.now().toString()
+    };
+
+    var db = FirebaseFirestore.instance.collection("notifications");
+
+    if(notificationStatus == NotificationStatus.subscribe) {
+      db.doc(category).set(catData);
+      
+      db.doc(category).collection('users').doc(deviceState.userId)
+        .set(data)
+        .onError((e, _) => print("Error writing document: $e"));
+    }
+    else if(notificationStatus == NotificationStatus.unsubscribe) {
+      db.doc(category).collection('users').doc(deviceState.userId).delete().onError((e, _) => print("Error deleting document: $e"));
+    }
+
+    });
+  }
+
+
 }

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:posao_app/providers/jobs.dart';
 import 'package:posao_app/screens/display_it_jobs.screen.dart';
 import 'package:posao_app/screens/display_jobs.screen.dart';
@@ -18,6 +19,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
+  OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.none);
+  OneSignal.shared.setAppId('bfb6abf3-aea8-4160-b40e-7a8b1c38ea18');
+  OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+    print("Accepted permission: $accepted");
+});
 }
 
 class MyApp extends StatelessWidget {

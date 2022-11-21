@@ -345,7 +345,7 @@ class _Home2ScreenState extends State<Home2Screen> {
                   Expanded(
                       flex: 2,
                       child: Icon(
-                        Icons.add_circle,
+                        Icons.notifications_active,
                         color: Colors.grey[400],
                       ))
                 ],
